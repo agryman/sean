@@ -123,5 +123,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# IntelliJ
 .idea/vcs.xml
 .idea/workspace.xml
