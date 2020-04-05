@@ -4,16 +4,16 @@ from re import search
 
 from colorama import init, Back, Style
 
-init()              # initialize colorama for Windows
+init()  # initialize colorama for Windows
 
-max_num_pegs = 6            # the maximum number of pegs allowed
-default_num_pegs = 4        # the default number of pegs in the secret code
+max_num_pegs = 6  # the maximum number of pegs allowed
+default_num_pegs = 4  # the default number of pegs in the secret code
 
 back_colours = (Back.BLACK, Back.RED, Back.GREEN, Back.YELLOW,
                 Back.BLUE, Back.WHITE, Back.MAGENTA, Back.CYAN)
 
 max_colours = len(back_colours)
-default_num_colours = 6     # the default number of different colours in the secret code
+default_num_colours = 6  # the default number of different colours in the secret code
 
 pegs = ['[' + Style.BRIGHT + back_colours[i] + '  ' + Style.RESET_ALL + ']'
         for i in range(len(back_colours))]
@@ -23,7 +23,7 @@ legend_items = [str(i) + ' = [' + Style.BRIGHT + back_colours[i] + '  ' + Style.
 
 legend = ', '.join(legend_items)
 
-max_guesses = 10            # the maximum numbers of guesses allowed in a game
+max_guesses = 10  # the maximum numbers of guesses allowed in a game
 
 
 def digits_code(code):
@@ -53,6 +53,7 @@ def parse_code(digits, n_pegs, n_colours):
 
     return code
 
+
 def generate_legend_items(n_colours):
     return [str(i) + ' = [' + Style.BRIGHT + back_colours[i] + '  ' + Style.RESET_ALL + ']'
             for i in range(n_colours)]
@@ -62,7 +63,7 @@ def generate_secret_code(n_pegs, n_colours):
     return [randint(0, n_colours - 1) for peg in range(n_pegs)]
 
 
-def print_stars(n = 80):
+def print_stars(n=80):
     print("*" * n)
 
 
@@ -73,6 +74,7 @@ def compute_spectrum(code, n_colours):
 
     return spectrum
 
+
 def score_guess(n_pegs, n_colours, secret_code, guess_code):
     secret_spectrum = compute_spectrum(secret_code, n_colours)
     guess_spectrum = compute_spectrum(guess_code, n_colours)
@@ -82,7 +84,8 @@ def score_guess(n_pegs, n_colours, secret_code, guess_code):
 
     white_score = total_score - black_score
 
-    return (black_score, white_score)
+    return black_score, white_score
+
 
 def format_score(black_score, white_score):
     return f'{black_score} black and {white_score} white'
@@ -93,9 +96,11 @@ def make_legend(n_colours):
     legend = ', '.join(legend_items)
     return legend
 
+
 def make_guess_label(guess_count):
     guess_number = f"[{guess_count}]"
     return f"{guess_number:>4}"
+
 
 def print_guess_history(guess_history):
     print('-' * 80)
@@ -123,12 +128,13 @@ def make_all_solutions(n_pegs, n_colours):
 
     return solutions
 
+
 def eliminate_solutions(n_pegs, n_colours, solutions, guess_code, black_score, white_score):
     return [code for code in solutions
             if (black_score, white_score) == score_guess(n_pegs, n_colours, code, guess_code)]
 
-def play(n_pegs = default_num_pegs, n_colours = default_num_colours):
 
+def play(n_pegs=default_num_pegs, n_colours=default_num_colours):
     if n_pegs < 2 or n_pegs > max_num_pegs:
         raise Exception(f"Number of pegs, {n_pegs}, must be greater than 1 and at most {max_num_pegs}.")
 
