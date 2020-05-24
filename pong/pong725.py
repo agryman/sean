@@ -26,10 +26,22 @@ pygame.draw.rect(screen, WHITE,
                  pygame.Rect(0, HEIGHT - BORDER,
                              WIDTH, BORDER))
 
-pong = pygame.mixer.Sound('test.wav')
-def beep():
-    # pong.play()
-    pass
+test = pygame.mixer.Sound('test.wav')
+Ping = pygame.mixer.Sound('Ping.wav')
+Pop = pygame.mixer.Sound('Pop.wav')
+Glass = pygame.mixer.Sound('Glass.wav')
+
+# downloaded from freesound.org
+Smash = pygame.mixer.Sound('344268__inspectorj__glass-smash-bottle-a.wav')
+Sigh = pygame.mixer.Sound('265249__wjtaylor__sigh.wav')
+
+def beep(sound):
+    if sound == 'wall':
+        Pop.play()
+    elif sound == 'paddle':
+        Ping.play()
+    elif sound == 'miss':
+        Sigh.play()
 
 class Ball:
 
@@ -62,21 +74,22 @@ class Ball:
         if newy + Ball.RADIUS > HEIGHT - BORDER \
                 or newy - Ball.RADIUS < BORDER:
             self.vy = -self.vy
-            beep()
+            beep('wall')
         # detect horizontal bounce
         elif newx - Ball.RADIUS < BORDER:
             self.vx = -self.vx
-            beep()
+            beep('wall')
         elif newx + Ball.RADIUS >= WIDTH - Paddle.WIDTH:
             if abs(newy - paddle.y) <= Paddle.HEIGHT // 2:
                 # the ball hit the paddle so bounce it and increment the score
                 self.vx = -self.vx
-                beep()
+                beep('paddle')
                 score += 1
             else:
                 # the ball missed the paddle so decrement the lives and restart the game
                 lives -= 1
                 self.show(BLACK)
+                beep('miss')
                 self.__init__(WIDTH - Ball.RADIUS - Paddle.WIDTH,
                               HEIGHT // 2, -VELOCITY, -VELOCITY)
                 self.show(WHITE)
