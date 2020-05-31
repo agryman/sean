@@ -74,4 +74,4 @@ while True:
         break
     ball.update()
     pygame.display.flip()
-quit()
+pygame.quit()

@@ -18,4 +18,4 @@ while True:
     if e.type == pygame.QUIT:
         break
 
-quit()
+pygame.quit()

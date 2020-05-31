@@ -28,4 +28,4 @@ while True:
     e = pygame.event.poll()
     if e.type == pygame.QUIT:
         break
-quit()
+pygame.quit()

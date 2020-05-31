@@ -151,4 +151,4 @@ while True:
     paddle.update()
     pygame.display.flip()
 
-quit()
+pygame.quit()
