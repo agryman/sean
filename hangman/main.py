@@ -1,21 +1,21 @@
 """This module implements the hangman game."""
 
 import random
+from hangman.hangmanwordbank import HANGMANPICS, words
 
 
 def load_words():
     """Returns a list of words."""
 
-    # TODO: load a long list of real words
-    return ['words', 'word', 'snake', 'tiger', 'tea']
+    return ['words', 'word', 'snake', 'tiger', 'tea'] + words
 
 
 def display_gallows(wrong_guesses, max_wrong_guesses):
     """Prints the gallows and partially hung person."""
 
-    # TODO: print a gallows and body
-    print(f'You have made {wrong_guesses} wrong guesses. \
-    You have {max_wrong_guesses - wrong_guesses} guesses left.')
+    print(HANGMANPICS[wrong_guesses])
+    print(f'You have made {wrong_guesses} wrong guesses. ' +
+          f'You have {max_wrong_guesses - wrong_guesses} guesses left.')
 
 
 def display_word(word, letters_guessed):
