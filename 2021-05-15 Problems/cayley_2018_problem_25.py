@@ -30,3 +30,7 @@ def is_solution(x:int, y:int) -> bool:
 
 
 solutions = [(x, y) for x in range(1, 101) for y in range(-100, 0) if is_solution(x, y)]
+
+xs = {x for (x, y) in solutions}
+
+xy_dict = { x: {y for (z, y) in solutions if z == x} for x in xs}
