@@ -12,7 +12,7 @@ def validate_response(response: str) -> Optional[str]:
     if pattern.match(response) is None:
         return f'Invalid response: {response}'
 
-def play(auto_A: bool = False, auto_B: bool = False):
+def play(auto_A: bool = False, auto_B: bool = False) -> None:
     """Play a game with moves for each player either input or automatically generated."""
     board: Board = Board()
     player: Player = Player.A
@@ -27,7 +27,7 @@ def play(auto_A: bool = False, auto_B: bool = False):
             cell_number = minimax(board, player)
             print(f'[{move_count}] Player {player_name} moved to {cell_number}.')
         else:
-            response: str = input(f'[{move_count}] Player {player_name}, enter your move or q to exit): ')
+            response: str = input(f'[{move_count}] Player {player_name}, enter your move or q to exit: ')
 
             if response == 'q':
                 print("Game exited.")
