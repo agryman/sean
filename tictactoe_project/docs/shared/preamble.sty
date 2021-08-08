@@ -1,0 +1,34 @@
+\NeedsTeXFormat{LaTeX2e}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usepackage{geometry}
+\geometry{letterpaper}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\usepackage{commath}
+
+\usepackage[autostyle]{csquotes}
+
+\usepackage{hyperref}
+
+\usepackage[
+backend=biber,
+style=alphabetic,
+sorting=ynt
+]{biblatex}
+
+% put fuzz last because it redefines \t
+\usepackage{fuzz}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem*{example}{Example}
+\newtheorem*{remark}{Remark}
+
+\newcommand{\cmd}[1]{{\tt\char`\\#1}}
+\newcommand{\zcmd}[1]{$\csname #1\endcsname$ \cmd{#1}}

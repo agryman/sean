@@ -1,0 +1,108 @@
+\documentclass[11pt, oneside]{article}
+
+\usepackage{../shared/preamble}
+%\addbibresource{../shared/references.bib}
+
+%\usepackage{sorting}
+
+\title{Sorting}
+\author{Arthur Ryman, {\tt arthur.ryman@gmail.com}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This article formalizes the notion of sorting to illustrate the relation between
+a specification and an implementation, and how to prove that an implementation satisfies
+a specification.
+\end{abstract}
+
+\section{Sorting}
+
+Suppose we are given a finite list of numbers and are asked to sort it.
+By sorting we mean that the result should contain exactly the same set of numbers, with the same multiplicities,
+arranged in ascending order.
+
+\subsection{Lists, $LIST$}
+
+Let $LIST$ denote a finite sequence of integers.
+
+\begin{zed}
+LIST == \seq \num
+\end{zed}
+
+\subsection{Ascending Order $ascending$}
+
+A list is in ascending order when any element that appears earlier in the list is less than
+or equal to any element that appears later in the list.
+Let $ascending$ denote the set of all lists that are in ascending order.
+
+\begin{zed}
+ascending == \{~ s: LIST | (\forall i, j: \dom s | i < j @ s(i) \leq s(j)) ~\}
+\end{zed}
+
+Although mathematically correct, the definition of $ascending$ is not in a 
+form that can be implemented efficiently on a computer.
+The definition implies that if the list contains $n$ elements then
+there are $n(n+1)/2$ pairs $(i, j)$ such that $i \leq j$ for which $s$ has to be checked.
+The complexity of the direct, naive implementation of this check is therefore $O(n^2)$.
+Clearly, we can reduce this complexity to $O(n)$.
+
+\subsection{Refinement of Ascending Order $ascending1$}
+
+A more efficient definition of ascending order is given by $ascending1$.
+
+\begin{zed}
+ascending1 == \{~ s: LIST | (\forall i: \dom s | i < \# s @ s(i) \leq s(i + 1)) ~\}
+\end{zed}
+
+Clearly, a direct implementation of this definition has complexity $O(n)$.
+
+\subsection{Theorem $ascending = ascending1$}
+
+Although the equivalence of $ascending$ and $ascending1$ is obvious to a human,
+other similar optimizations may not be.
+It is therefore instructive to prove the equivalence.
+
+The plan of the proof is to prove $ascending \subseteq ascending1$ and $ascending1 \subseteq ascending$
+which corresponds to unfolding the definition of equality for sets.
+
+First prove $ascending \subseteq ascending1$.
+
+\begin{argue}
+s: ascending 							& assumption \\
+\forall i, j : \dom s | i < j @ s(i) \leq s(j)		& def of $ascending$ \\
+i: \dom s | i < \# s						& intro $i$ \\
+j == i + 1								& intro $j$ \\
+j \in \dom s							& def of $\dom$ \\
+i < j									& def of $<$ \\
+s(i) \leq s(j)							& $\forall$-elim \\
+s(i) \leq s(i + 1)							& def of $j$ \\
+\forall i: \dom s | i < \# s @ s(i) \leq s(i + 1)		& $\forall$-intro \\
+s \in ascending1						& def of $ascending1$ \\
+s: ascending \implies s \in ascending1		& $\implies$-intro \\
+ascending \subseteq ascending1			& $s$-elim QED
+\end{argue}
+
+Next prove  $ascending1 \subseteq ascending$.
+This proof requires induction on the length of the list.
+
+\begin{argue}
+s: ascending1							& assumption \\
+\forall i: \dom s | i < \# s @ s(i) \leq s(i + 1)		& def of $ascending1$ \\
+\# s = 0								& assumption \\
+s \in ascending							& def of $ascending$ \\
+\# s = 0 \implies s \in ascending				& $\implies$-intro \\
+\# s = 1								& assumption \\
+s in ascending							& def of $ascending$ \\
+\# s = 1 \implies s \in ascending				& $\implies$-intro \\
+n: \nat_1 | n > 1							& intro $n$ \\
+\#s = n \implies s \in ascending				& inductive assumption
+
+\end{argue}
+
+%\printbibliography
+
+\end{document}  

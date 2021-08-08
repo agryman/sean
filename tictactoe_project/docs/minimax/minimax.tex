@@ -1,0 +1,240 @@
+\documentclass[11pt, oneside]{article}
+
+\usepackage{../shared/preamble}
+%\addbibresource{../shared/references.bib}
+
+\usepackage{minimax}
+
+\title{The Minimax Algorithm}
+\author{Arthur Ryman, {\tt arthur.ryman@gmail.com}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This article formalizes the minimax algorithm for playing 2-person games.
+Each player searches graph of moves for an optimal move.
+This article also formalizes the alpha-beta pruning heuristic for speeding up the search.
+\end{abstract}
+
+\section{Games}
+
+For the purposes of this article, a game is an activity engaged in by one or more players
+who attempt to win by making moves that lead to a winning state.
+
+\subsection{Game States $State$}
+
+Let $State$ denote the set of all game states.
+
+\begin{zed}
+[State]
+\end{zed}
+
+\subsection{The Game is Finite and Non-Empty $game\_is\_finite$}
+
+We assume that there are a finite, non-zero number of game states.
+Let $game\_is\_finite$ denote this constraint.
+
+\begin{zed}
+State \in \finset_1 State
+\end{zed}
+
+\subsection{Start State $start$}
+
+The game has a unique, distinguished starting state.
+Let $start$ denote the starting game state.
+
+\begin{axdef}
+start: State
+\end{axdef} 
+
+\subsection{Moves $moves$}
+
+A player can select from zero or more moves that are available in any given game state.
+Let $moves$ denote the binary relation on the set of game states that relates a given game state to another
+if and only if the player can move from the given game state to the other.
+
+\begin{axdef}
+moves: State \rel State
+\end{axdef}
+
+\subsection{Children $children$}
+
+The set of all games states that can be reached in one move from a given state
+are called the children of that state.
+Let $children$ denote the mapping from a game state to its children.
+
+\begin{zed}
+children == (\lambda p: State @ \{~ c: State | p \mapsto c \in moves ~\}) 
+\end{zed}
+
+\subsection{Terminal States $terminal$}
+
+A state that has no children is  called a terminal state.
+Let $terminal$ denote the set of all terminal states.
+
+\begin{zed}
+terminal == \{~ x: State | children(x)  = \emptyset ~\}
+\end{zed}
+
+The game terminates when a terminal state is reached.
+
+\subsection{Terminal Score $terminal\_score$}
+
+Every terminal state is assigned a numeric score.
+Each player makes moves that they think will lead to a terminal state that optimizes their score.
+
+\begin{axdef}
+terminal\_score: terminal \fun \num
+\end{axdef}
+
+\subsection{Parents $parents$}
+
+The set of all games states that a given game state can be reached from in one move
+are called the parents of the given state.
+Let $parents$ denote that mapping from a game state to its parents,
+
+\begin{zed}
+parents == (\lambda c: State @ \{~ p: State | p \mapsto c \in moves~\})
+\end{zed}
+
+\subsection{Initial States $initial$}
+
+A state that has no parents is called an initial state.
+Let $initial$ denote the set of initial states.
+
+\begin{zed}
+initial == \{~ x: State | parents(x) = \emptyset ~\}
+\end{zed}
+
+\subsection{The Start State is an Initial State $start\_is\_initial$}
+
+We assume that the start state has no parents.
+Let $start\_is\_initial$ denote this constraint.
+
+\begin{zed}
+start \in initial
+\end{zed}
+
+\subsection{Paths $paths$}
+
+A path is a sequence of two or more game states such each pair of successive states are
+related by a move.
+
+\begin{zed}
+paths == \\
+\t1	\{~ p: \seq State | \# p \geq 2  \land \\
+\t2		(\forall i: 1 \upto \# p - 1 @ \\
+\t3			p(i) \mapsto p(i + 1) \in moves) ~\}
+\end{zed}
+
+\subsection{The Game is Connected $game\_is\_connected$}
+
+We assume that every game state, other than the start state, is connected to the start state
+by a path.
+Let $game\_is\_connected$ denote this constraint.
+
+\begin{zed}
+\forall s: State | s \neq start @ \\
+\t1	\exists path: paths @ \\
+\t2		path(1) = start \land \\
+\t2		path(\# path) = s
+\end{zed}
+
+\subsection{Cycles $cycles$}
+
+A path that begins and ends on the same state is called a cycle.
+Let $cycle$ denote the set of all cycles.
+
+\begin{zed}
+cycles == \{~ p: paths | p(1) = p(\# p) ~\}
+\end{zed}
+
+\subsection{The Game Has No Cycles $game\_is\_acyclic$}
+
+We assume that the game has no cycles.
+Let $game\_is\_acyclic$ denote this constraint.
+
+\begin{zed}
+cycles = \emptyset
+\end{zed}
+
+\section{2-Person Games}
+
+Games such as tic-tac-toe and chess are played by two players who take turns moving.
+
+\subsection{Players $Player$}
+
+Let $Player$ denote the set of players.
+
+\begin{zed}
+Player ::= A | B
+\end{zed}
+
+The players are denoted by $A$ and $B$ who we can think of as being Alice and Bob.
+
+\subsection{Who Moves $player$}
+
+The players take turns moving.
+The game state determines who moves next.
+Let $player$ denote the mapping from the game state to the player who moves next.
+
+\begin{axdef}
+player: State \fun Player
+\end{axdef}
+
+\subsection{Player $A$ Starts $player\_A\_starts$}
+
+Without loss of generality, we can assume that Alice moves first.
+Let $player\_A\_starts$ denote this constraint.
+
+\begin{zed}
+player(start) = A
+\end{zed}
+
+\subsection{Players Alternate $players\_alternate$}
+
+The players take turns moving.
+Let $players\_alternate$ denote this constraint.
+
+\begin{zed}
+\forall x, y: State | x \mapsto y \in moves @ player(x) \neq player(y)
+\end{zed}
+
+\subsection{Optimal Score $optimal\_score$}
+
+We assume that the players are playing for money or some other fungible objects.
+The terminal score of a terminal game state is the amount that Alice wins and Bob loses.
+Equivalently, the negative of a terminal score is the amount that Bob wins and Alice loses.
+Each player tries to optimize their score.
+Thus, Alice tries to reach a terminal state that has the highest score while
+Bob tries to reach one with the lowest score.
+
+We can therefore define the optimal score for each state by working backwards from the
+terminal states.
+Let $optimal\_score$ denote the function that assigns the optimal score to each state.
+
+\begin{axdef}
+optimal\_score: State \fun \num
+\where
+\forall x: terminal @ \\
+\t1	optimal\_score(x) = terminal\_score(x)
+\also
+\forall x: State \setminus terminal | player(x) = A @ \\
+\t1	optimal\_score(x) = max \{~ y: children(x) @ optimal\_score(y) ~\}
+\also
+\forall x: State \setminus terminal | player(x) = B @ \\
+\t1	optimal\_score(x) = min \{~ y: children(x) @ optimal\_score(y) ~\}
+\end{axdef}
+
+This axiomatic description is recursive. 
+The dependency graph of $optimal\_score$ is the same as the game moves graph.
+However, the game is acyclic so we can compute $optimal\_score$ bottom-up using 
+a topological sort of the game graph.
+Therefore, $optimal\_score$ is uniquely defined.
+
+%\printbibliography
+
+\end{document}  

@@ -1,0 +1,21 @@
+\BOOKMARK [1][-]{section.1}{Games}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Game States State}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{The Game is Finite and Non-Empty game\137is\137finite}{section.1}% 3
+\BOOKMARK [2][-]{subsection.1.3}{Start State start}{section.1}% 4
+\BOOKMARK [2][-]{subsection.1.4}{Moves moves}{section.1}% 5
+\BOOKMARK [2][-]{subsection.1.5}{Children children}{section.1}% 6
+\BOOKMARK [2][-]{subsection.1.6}{Terminal States terminal}{section.1}% 7
+\BOOKMARK [2][-]{subsection.1.7}{Terminal Score terminal\137score}{section.1}% 8
+\BOOKMARK [2][-]{subsection.1.8}{Parents parents}{section.1}% 9
+\BOOKMARK [2][-]{subsection.1.9}{Initial States initial}{section.1}% 10
+\BOOKMARK [2][-]{subsection.1.10}{The Start State is an Initial State start\137is\137initial}{section.1}% 11
+\BOOKMARK [2][-]{subsection.1.11}{Paths paths}{section.1}% 12
+\BOOKMARK [2][-]{subsection.1.12}{The Game is Connected game\137is\137connected}{section.1}% 13
+\BOOKMARK [2][-]{subsection.1.13}{Cycles cycles}{section.1}% 14
+\BOOKMARK [2][-]{subsection.1.14}{The Game Has No Cycles game\137is\137acyclic}{section.1}% 15
+\BOOKMARK [1][-]{section.2}{2-Person Games}{}% 16
+\BOOKMARK [2][-]{subsection.2.1}{Players Player}{section.2}% 17
+\BOOKMARK [2][-]{subsection.2.2}{Who Moves player}{section.2}% 18
+\BOOKMARK [2][-]{subsection.2.3}{Player A Starts player\137A\137starts}{section.2}% 19
+\BOOKMARK [2][-]{subsection.2.4}{Players Alternate players\137alternate}{section.2}% 20
+\BOOKMARK [2][-]{subsection.2.5}{Optimal Score optimal\137score}{section.2}% 21
