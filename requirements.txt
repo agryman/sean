@@ -15,7 +15,7 @@ entrypoints==0.3
 executing==0.8.2
 iniconfig==1.1.1
 ipykernel==6.7.0
-ipython==8.0.1
+ipython==8.10.0
 ipython-genutils==0.2.0
 ipywidgets==7.6.5
 jedi==0.18.1
