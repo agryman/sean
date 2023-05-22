@@ -30,7 +30,7 @@ jupyterlab-widgets==1.0.2
 MarkupSafe==2.0.1
 matplotlib-inline==0.1.3
 mistune==2.0.3
-mpmath==1.2.1
+mpmath==1.3.0
 mypy==0.931
 mypy-extensions==0.4.3
 nbclient==0.5.10
